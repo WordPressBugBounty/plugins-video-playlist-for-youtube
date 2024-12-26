@@ -4,9 +4,9 @@ Contributors: galaxyweblinks
 Donate link: https://www.galaxyweblinks.com
 Tags: Videos, YouTube Video, Video gallery, YouTube gallery, YouTube slider
 Requires at least: WordPress 4.9 or higher
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 6.3
+Stable tag: 6.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,6 +36,10 @@ FEATURES OF VIDEO PLAYLIST FOR YOUTUBE:
 * Adjust the width and height features for each playlist.
 * Create unlimited Video playlists.
 
+Here’s a link to the documentation for the plugin. This will help you learn more about its features and how to use it.
+<strong>[Demo](https://wp-plugins.galaxyweblinks.com/wp-plugins/video-playlist-for-youtube/demo)</strong> | <strong>[Documentation](https://wp-plugins.galaxyweblinks.com/wp-plugins/video-playlist-for-youtube/doc)</strong>
+
+For any feedback or queries regarding this plugin, please contact our [Support team](https://wp-plugins.galaxyweblinks.com/contact/).
 
 == Installation ==
 
@@ -99,6 +103,9 @@ Please check the below steps.
 
 == Changelog ==
 
+= 6.4 =
+- Stable Release
+
 = 6.3 =
 - Stable Release
 - Fixed Gallery Video issues.
@@ -134,6 +141,9 @@ Implemented Video length on the video thumbnail in the playlist
 First Stable Release
 
 == Upgrade Notice ==
+
+= 6.4 =
+- Stable Release
 
 = 6.3 =
 - Stable Release

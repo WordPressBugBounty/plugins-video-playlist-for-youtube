@@ -3,7 +3,21 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
 
 function vpfy_submenu_settings_page() { ?>
     <div class="wrap">
+
         <h2><?php esc_attr_e('Video Playlist for YouTube Settings', 'video-playlist-for-youtube'); ?></h2>
+
+        <div class="notice dpffm--notice">
+            <div>
+                <h3><?php esc_attr_e('Video Playlist for YouTube', 'video-playlist-for-youtube'); ?></h3>
+                <p>Here's a link to the demo and documentation for the plugin. This will help you learn more about its features and how to use it.</p>
+                <div class="e-notice__actions">
+                    <a href="https://wp-plugins.galaxyweblinks.com/wp-plugins/video-playlist-for-youtube/demo" class="e-button--cta" target="_blank"><span>Demo</span></a>
+                    <a href="https://wp-plugins.galaxyweblinks.com/wp-plugins/video-playlist-for-youtube/doc" class="e-button--cta cta-secondary" target="_blank"><span>Documentation</span></a>
+                </div>
+                <p class="e-note">For any feedback or queries regarding this plugin, please contact our <a href="https://wp-plugins.galaxyweblinks.com/contact/" target="_blank">Support team</a>.</p>
+            </div>
+        </div>
+
         <?php  
         wp_enqueue_style('vpfy-vplay-settings');
         wp_enqueue_script('vpfyt-vplay-settngpg');

@@ -6,7 +6,7 @@ function vpfy_submenu_settings_page() { ?>
 
         <h2><?php esc_attr_e('Video Playlist for YouTube Settings', 'video-playlist-for-youtube'); ?></h2>
 
-        <div class="notice dpffm--notice">
+        <div class="notice vpfy--notice">
             <div>
                 <h3><?php esc_attr_e('Video Playlist for YouTube', 'video-playlist-for-youtube'); ?></h3>
                 <p>Here's a link to the demo and documentation for the plugin. This will help you learn more about its features and how to use it.</p>

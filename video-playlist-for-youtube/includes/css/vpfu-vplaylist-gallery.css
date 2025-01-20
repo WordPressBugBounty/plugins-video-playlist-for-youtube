@@ -1381,6 +1381,58 @@ img.ug-sepia-effect{
 .ug-thumb-icon {
     position: relative;
 }
+
+/*Arrow up and arrow down css*/
+.vpfy-arrow-up, .vpfy-arrow-down {
+  position: absolute;
+  display: none; /* Initially hide arrows */
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  color: black;
+  text-align: center;
+  line-height: 30px;
+  cursor: pointer;
+  z-index: 100;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+/* Position the arrows - Adjusting for responsive design */
+.vpfy-arrow-up {
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.vpfy-arrow-down {
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Ensure the thumbnail container can scroll */
+.ug-thumbs-strip-inner {
+  overflow-y: auto;
+  height: 450px; /* Adjust based on your layout */
+  position: relative;
+}
+
+/* Styling the scrollbars */
+.ug-thumbs-strip-inner::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ug-thumbs-strip-inner::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+}
+
+.ug-thumbs-strip-inner::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+/*arrow up and arrow down css end*/
+
 @media only screen and (max-width: 860px) {
 	span.vpfyt-viddur {
     left: 0;
@@ -1391,4 +1443,56 @@ img.ug-sepia-effect{
     bottom: 0;
 
 	}
+}
+
+/* Arrow up and arrow down Responsive adjustments for arrow size */
+@media (max-width: 768px) {
+  .vpfy-arrow-up, .vpfy-arrow-down {
+    font-size: 18px;
+    width: 25px;
+    height: 25px;
+  }
+  
+  /* Adjust thumbnail container height for smaller screens */
+  .ug-thumbs-strip-inner {
+    height: 350px;
+  }
+
+  /* Ensure video player container is responsive */
+  .ug-videoplayer {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  /* Adjust the layout of the thumbs and videos */
+  .ug-gallery-wrapper {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .vpfy-arrow-up, .vpfy-arrow-down {
+    font-size: 16px;
+    width: 25px;
+    height: 25px;
+  }
+
+  /* Adjust thumbnail container height for smaller screens */
+  .ug-thumbs-strip-inner {
+    height: 300px;
+  }
+
+  /* Adjust the layout for smaller devices */
+  .ug-gallery-wrapper {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .ug-strip-panel {
+    left: 0; /* Adjust the position for small screens */
+  }
 }

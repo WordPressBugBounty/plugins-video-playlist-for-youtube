@@ -401,3 +401,66 @@ var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
 	
 	
 }
+
+
+// Arrow up and down js code
+setTimeout(function() {
+    var thumbsContainer = document.querySelector('.ug-thumbs-strip-inner');
+    if (!thumbsContainer) {
+        return; // Stop further execution if the container is not found
+    }
+
+    // Create arrow elements
+    var arrowUp = document.createElement('div');
+    arrowUp.classList.add('vpfy-arrow-up');
+    arrowUp.innerHTML = '↑';
+
+    var arrowDown = document.createElement('div');
+    arrowDown.classList.add('vpfy-arrow-down');
+    arrowDown.innerHTML = '↓';
+
+    // Append arrows to the parent of the thumbnails container
+    thumbsContainer.parentElement.appendChild(arrowUp);
+    thumbsContainer.parentElement.appendChild(arrowDown);
+
+    // Function to show/hide arrows based on scroll position
+    function showArrows(event) {
+        var rect = thumbsContainer.getBoundingClientRect();
+        var mousePosition = event.clientY || event.touches[0].clientY;
+
+        // Show the top arrow when mouse/touch is near the top edge (30px from the top)
+        if (mousePosition < rect.top + 250) {
+            arrowUp.style.display = 'block';
+        } else {
+            arrowUp.style.display = 'none';
+        }
+
+        // Show the bottom arrow when mouse/touch is near the bottom edge (30px from the bottom)
+        if (mousePosition > rect.bottom - 250) {
+            arrowDown.style.display = 'block';
+        } else {
+            arrowDown.style.display = 'none';
+        }
+    }
+
+    // Listen to mousemove and touchmove events
+    thumbsContainer.addEventListener('mousemove', showArrows);
+    thumbsContainer.addEventListener('touchmove', showArrows, { passive: true });
+
+    // Scroll up when the arrow up is clicked
+    arrowUp.addEventListener('click', function () {
+        thumbsContainer.scrollBy({
+            top: -50, // Scroll by 50px upwards
+            behavior: 'smooth' // Smooth scroll effect
+        });
+    });
+
+    // Scroll down when the arrow down is clicked
+    arrowDown.addEventListener('click', function () {
+        thumbsContainer.scrollBy({
+            top: 50, // Scroll by 50px downwards
+            behavior: 'smooth' // Smooth scroll effect
+        });
+    });
+
+}, 1000); // Delay of 1 second

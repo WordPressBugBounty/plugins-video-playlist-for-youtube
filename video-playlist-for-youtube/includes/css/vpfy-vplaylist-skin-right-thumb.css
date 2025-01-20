@@ -12,9 +12,11 @@
 	background-color:#232323;
 	border-bottom:1px solid #393939;
 	width:420px;
-	height:61px;
+	height:auto;
+	min-height: 61px;
 	cursor:pointer; 
-    text-align:left;
+  text-align:left;
+  padding-bottom: 5px;
 }
 
 .ug-videoskin-right-thumb .ug-thumb-wrapper:last-child{

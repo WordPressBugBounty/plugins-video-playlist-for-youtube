@@ -3,7 +3,7 @@
  * Plugin Name: Video Playlist for YouTube
  * Plugin URI: https://wordpress.org/plugins/video-playlist-for-youtube
  * Description: It is a very nifty responsive video playlist for youtube that helps you display youtube channels and videos on your website. By using this plugin you can create unlimited playlist while setting up many options and arrange them in any order using drag n drop features.
- * Version: 6.5
+ * Version: 6.6
  * Author: Galaxy Weblinks
  * Author URI: https://www.galaxyweblinks.com/
  * Text Domain: video-playlist-for-youtube
@@ -168,15 +168,17 @@ function vpfy_vplaylist_repeatable_meta_box_display()
 						<td width="20%">
 							<input type="text" required="required" placeholder="Title" name="TitleItem[]" value="<?php if ($field['TitleItem'] != '') echo esc_attr($field['TitleItem']); ?>" />
 						</td>
-						<td width="35%">
+						<td width="30%">
 							<textarea placeholder="Description" cols="40" rows="3" name="TitleDescription[]"> <?php if ($field['TitleDescription'] != '') echo esc_attr($field['TitleDescription']); ?> </textarea>
 						</td>
-
+						<td width="10%">
+							<input type="number" placeholder="Description length" name="Descriptionlength[]" value="<?php if ($field['Descriptionlength'] != '') echo esc_attr($field['Descriptionlength']); ?>" />
+						</td>
 						<td width="30%">
 							<input type="text" placeholder="Youtube URL" name="YoutubeUr[]" value="<?php if ($field['YoutubeUr'] != '') echo esc_attr($field['YoutubeUr']); ?>" />
 						</td>
 
-						<td width="15%"><a class="button remove-row" href="#1">Remove</a><span class="ytubedraggable">
+						<td width="10%"><a class="button remove-row" href="#1">Remove</a><span class="ytubedraggable">
 								<svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" role="img" aria-hidden="true" focusable="false">
 									<path d="M13,8c0.6,0,1-0.4,1-1s-0.4-1-1-1s-1,0.4-1,1S12.4,8,13,8z M5,6C4.4,6,4,6.4,4,7s0.4,1,1,1s1-0.4,1-1S5.6,6,5,6z M5,10 c-0.6,0-1,0.4-1,1s0.4,1,1,1s1-0.4,1-1S5.6,10,5,10z M13,10c-0.6,0-1,0.4-1,1s0.4,1,1,1s1-0.4,1-1S13.6,10,13,10z M9,6 C8.4,6,8,6.4,8,7s0.4,1,1,1s1-0.4,1-1S9.6,6,9,6z M9,10c-0.6,0-1,0.4-1,1s0.4,1,1,1s1-0.4,1-1S9.6,10,9,10z"></path>
 								</svg></span></td>
@@ -193,7 +195,9 @@ function vpfy_vplaylist_repeatable_meta_box_display()
 					<td>
 						<textarea placeholder="Description" name="TitleDescription[]" cols="40" rows="3">  </textarea>
 					</td>
-
+					<td>
+						<input type="text" required="required" placeholder="Description length" title="Description lenght" name="Descriptionlength[]" />
+					</td>
 					<td>
 						<input type="text" placeholder="Youtube URL" name="YoutubeUr[]" />
 					</td>
@@ -214,6 +218,9 @@ function vpfy_vplaylist_repeatable_meta_box_display()
 				</td>
 				<td>
 					<textarea placeholder="Description" cols="40" rows="3" name="TitleDescription[]"></textarea>
+				</td>
+				<td>
+					<input type="text" placeholder="Description length" name="Descriptionlength[]" />
 				</td>
 				<td>
 					<input type="text" placeholder="Youtube URL" name="YoutubeUr[]" />
@@ -261,6 +268,12 @@ function custom_repeatable_meta_box_save($post_id)
 		$prices[] = sanitize_textarea_field($titlDesValue);
 	}
 
+	/*Description length*/
+	$deslength = array();
+	foreach ($_POST['Descriptionlength'] as $titlDesLength) {
+		$deslength[] = sanitize_textarea_field($titlDesLength);
+	}
+
 	/*URL*/
 	$YoutubeUr = array();
 	foreach ($_POST['YoutubeUr'] as $youtubeUrlValue) {
@@ -271,6 +284,7 @@ function custom_repeatable_meta_box_save($post_id)
 	for ($i = 0; $i < $count; $i++) {
 		if ($invoiceItems[$i] != '') :
 			$new[$i]['TitleItem'] = stripslashes(wp_strip_all_tags(trim($invoiceItems[$i])));
+			$new[$i]['Descriptionlength'] = stripslashes(wp_strip_all_tags(trim($deslength[$i])));
 			$new[$i]['TitleDescription'] = stripslashes(trim($prices[$i])); // and however you want to sanitize
 			$new[$i]['YoutubeUr'] = filter_var($YoutubeUr[$i], FILTER_SANITIZE_URL);
 		endif;
@@ -289,96 +303,99 @@ function custom_repeatable_meta_box_save($post_id)
 }
 
 /*Display playlist*/
+/*Display playlist*/
 add_shortcode('videoPlaylist', 'vpfy_vplaylist_display_gallery');
 function vpfy_vplaylist_display_gallery($atts)
 {
-	$arry_arg = shortcode_atts(array('id' => ''), $atts);
+    $arry_arg = shortcode_atts(array('id' => ''), $atts);
 
-	$output = '';
-	ob_start(); ?>
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
-	<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
-	<?php
-	wp_enqueue_script('vpfy-playlist-min');
-	wp_enqueue_script('vpfy-playlist-video');
-	wp_enqueue_script('vpfy-unitegallery-video');
-	wp_enqueue_style('vpfy-vplay-galcss');
-	wp_enqueue_style('vpfy-playlist-ryt-no-thumb');
-	wp_enqueue_style('vpfy-playlist-ryt-thumb');
-	wp_enqueue_style('vpfy-playlist-ryt-ttl-only');
-	wp_enqueue_style('vpfy-unite-gallery');
+    $output = '';
+    ob_start(); ?>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
+    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+    <?php
+    wp_enqueue_script('vpfy-playlist-min');
+    wp_enqueue_script('vpfy-playlist-video');
+    wp_enqueue_script('vpfy-unitegallery-video');
+    wp_enqueue_style('vpfy-vplay-galcss');
+    wp_enqueue_style('vpfy-playlist-ryt-no-thumb');
+    wp_enqueue_style('vpfy-playlist-ryt-thumb');
+    wp_enqueue_style('vpfy-playlist-ryt-ttl-only');
+    wp_enqueue_style('vpfy-unite-gallery');
 
-	if (!empty($arry_arg['id'])) {
-		$ytube_custmgrp = get_post_meta($arry_arg['id'], 'customdata_group', true);
+    if (!empty($arry_arg['id'])) {
+        $ytube_custmgrp = get_post_meta($arry_arg['id'], 'customdata_group', true);
 
-		echo ('<div id="gallery' . esc_attr($arry_arg['id']) . '" style="margin:0px auto;display:none;">');
-		foreach ($ytube_custmgrp as $ykey => $ytubvalue) {
-			$ytuburl = parse_url($ytubvalue['YoutubeUr']);
+        echo ('<div id="gallery' . esc_attr($arry_arg['id']) . '" style="margin:0px auto;display:none;">');
+        foreach ($ytube_custmgrp as $ykey => $ytubvalue) {
+            $ytuburl = parse_url($ytubvalue['YoutubeUr']);
 
-			$existance = 0;
-			foreach ($ytuburl as $utkey => $utvalue) {
-				if ('query' == $utkey) {
-					$existance = 1;
-				} else {
-					$existance = 0;
-				}
-			}
+            $existance = 0;
+            foreach ($ytuburl as $utkey => $utvalue) {
+                if ('query' == $utkey) {
+                    $existance = 1;
+                } else {
+                    $existance = 0;
+                }
+            }
 
-			if ($existance == 1) {
-				$ytubid = explode('v=', $ytuburl['query']);
-				$ytubid = explode('&', $ytubid[1]);
-				if (strlen($ytubvalue['TitleItem']) > 25) {
-					$ytvidTitle = substr($ytubvalue['TitleItem'], 0, 25) . "...";
-				} else {
-					$ytvidTitle = $ytubvalue['TitleItem'];
-				}
-	?>
-				<div data-type="youtube"
-					data-title="<?php echo esc_attr($ytvidTitle); ?>"
-					data-description="<?php echo esc_attr(substr($ytubvalue['TitleDescription'], 0, 80)); ?>"
-					data-thumb="https://i.ytimg.com/vi/<?php echo esc_attr($ytubid[0]); ?>/mqdefault.jpg"
-					data-image="https://i.ytimg.com/vi/<?php echo esc_attr($ytubid[0]); ?>/sddefault.jpg"
-					data-videoid="<?php echo esc_attr($ytubid[0]); ?>"></div>
-			<?php } elseif ($existance == 0) { ?>
-				<div data-type="youtube"
-					data-title="<?php echo esc_attr($ytubvalue['TitleItem']); ?>"
-					data-description="<?php echo esc_attr(substr($ytubvalue['TitleDescription'], 0, 80)); ?>"
-					data-thumb="https://i.ytimg.com/vi/123/mqdefault.jpg"
-					data-image="https://i.ytimg.com/vi/123/sddefault.jpg"
-					data-videoid="123"></div>
-		<?php }
-		}
-		echo ('</div>');
+            if ($existance == 1) {
+                $ytubid = explode('v=', $ytuburl['query']);
+                $ytubid = explode('&', $ytubid[1]);
+                if (strlen($ytubvalue['TitleItem']) > 25) {
+                    $ytvidTitle = substr($ytubvalue['TitleItem'], 0, 25) . "...";
+                } else {
+                    $ytvidTitle = $ytubvalue['TitleItem'];
+                }
 
-		if (null !== get_post_meta($arry_arg['id'], '_utubeSliderRange', true)) {
-			$sliderRange = get_post_meta($arry_arg['id'], '_utubeSliderRange', true);
-		}
-		$sliderWidth = !empty($sliderRange) ? $sliderRange[0] : '1100';
-		$sliderHeight = !empty($sliderRange) ? $sliderRange[1] : '450';
-		if (!empty(get_option('vpfy_vid_autoply')) && get_option('vpfy_vid_autoply') == 1) {
-			$autoply = 'true';
-		} else {
-			$autoply = 'false';
-		}
-		?>
-		<script>
-			jQuery(document).ready(function() {
-				jQuery("#gallery<?php echo esc_attr($arry_arg['id']); ?>").unitegallery({
-					gallery_theme: "video",
-					gallery_width: <?php echo esc_attr($sliderWidth); ?>,
-					gallery_height: <?php echo esc_attr($sliderHeight); ?>,
-					theme_autoplay: <?php echo esc_attr($autoply); ?>,
-				});
-			});
-		</script>
-	<?php
-	}
-	?>
+                // Set default description length to 80 if not provided
+                $descriptionlength = !empty($ytubvalue['Descriptionlength']) && is_numeric($ytubvalue['Descriptionlength']) ? $ytubvalue['Descriptionlength'] : 80;
+                ?>
+                <div data-type="youtube"
+                    data-title="<?php echo esc_attr($ytvidTitle); ?>"
+                    data-description="<?php echo esc_attr(substr($ytubvalue['TitleDescription'], 0, $descriptionlength)); ?>"
+                    data-thumb="https://i.ytimg.com/vi/<?php echo esc_attr($ytubid[0]); ?>/mqdefault.jpg"
+                    data-image="https://i.ytimg.com/vi/<?php echo esc_attr($ytubid[0]); ?>/sddefault.jpg"
+                    data-videoid="<?php echo esc_attr($ytubid[0]); ?>"></div>
+            <?php } elseif ($existance == 0) { ?>
+                <div data-type="youtube"
+                    data-title="<?php echo esc_attr($ytubvalue['TitleItem']); ?>"
+                    data-description="<?php echo esc_attr(substr($ytubvalue['TitleDescription'], 0, $descriptionlength)); ?>"
+                    data-thumb="https://i.ytimg.com/vi/123/mqdefault.jpg"
+                    data-image="https://i.ytimg.com/vi/123/sddefault.jpg"
+                    data-videoid="123"></div>
+        <?php }
+        }
+        echo ('</div>');
+
+        if (null !== get_post_meta($arry_arg['id'], '_utubeSliderRange', true)) {
+            $sliderRange = get_post_meta($arry_arg['id'], '_utubeSliderRange', true);
+        }
+        $sliderWidth = !empty($sliderRange) ? $sliderRange[0] : '1100';
+        $sliderHeight = !empty($sliderRange) ? $sliderRange[1] : '450';
+        if (!empty(get_option('vpfy_vid_autoply')) && get_option('vpfy_vid_autoply') == 1) {
+            $autoply = 'true';
+        } else {
+            $autoply = 'false';
+        }
+        ?>
+        <script>
+            jQuery(document).ready(function() {
+                jQuery("#gallery<?php echo esc_attr($arry_arg['id']); ?>").unitegallery({
+                    gallery_theme: "video",
+                    gallery_width: <?php echo esc_attr($sliderWidth); ?>,
+                    gallery_height: <?php echo esc_attr($sliderHeight); ?>,
+                    theme_autoplay: <?php echo esc_attr($autoply); ?>,
+                });
+            });
+        </script>
+    <?php
+    }
+    ?>
 
 <?php $output = ob_get_clean();
-	return $output;
+return $output;
 }
-
 
 // Add the custom columns to the youtube playlist post type:
 add_filter('manage_vid_playlist_ytub_posts_columns', 'set_custom_vpfy_shortcode_columns');

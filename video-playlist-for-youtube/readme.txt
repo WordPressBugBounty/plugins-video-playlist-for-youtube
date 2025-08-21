@@ -6,7 +6,7 @@ Tags: Videos, YouTube Video, Video gallery, YouTube gallery, YouTube slider
 Requires at least: WordPress 4.9 or higher
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 6.7
+Stable tag: 6.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,8 +36,20 @@ FEATURES OF VIDEO PLAYLIST FOR YOUTUBE:
 * Adjust the width and height features for each playlist.
 * Create unlimited Video playlists.
 
+= Video Playlist For YouTube Pro =
+
+[__Video Playlist For YouTube Pro__](https://wp-plugins.galaxyweblinks.com/product/video-playlist-for-youtube-pro) is the ultimate tool for content creators, marketers, educators, and anyone looking to present their video content professionally and effectively. Elevate your website with dynamic, engaging video experiences that captivate your audience and keep them coming back for more!
+
+Using this feature, the user can create unlimited video playlists using embedded custom YouTube/Wistia video URLs. Users can add the title and description for each video and arrange them in any order as per their requirements. They can also set playlist width and height, enable autoplay, and display video length.
+
+= With the Pro version, you can now enjoy the following additional features: =
+
+* Create unlimited YouTube/Wistia video playlists.
+
+
 Here’s a link to the documentation for the plugin. This will help you learn more about its features and how to use it.
 <strong>[Demo](https://wp-plugins.galaxyweblinks.com/wp-plugins/video-playlist-for-youtube/demo)</strong> | <strong>[Documentation](https://wp-plugins.galaxyweblinks.com/wp-plugins/video-playlist-for-youtube/doc)</strong>
+
 
 For any feedback or queries regarding this plugin, please contact our [Support team](https://wp-plugins.galaxyweblinks.com/contact/).
 
@@ -103,6 +115,9 @@ Please check the below steps.
 
 == Changelog ==
 
+= 6.7.1 =
+- Stable Release
+
 = 6.7 =
 - Stable Release
 
@@ -150,6 +165,9 @@ Implemented Video length on the video thumbnail in the playlist
 First Stable Release
 
 == Upgrade Notice ==
+
+= 6.7.1 =
+- Stable Release
 
 = 6.7 =
 - Stable Release

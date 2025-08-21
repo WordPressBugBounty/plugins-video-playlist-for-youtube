@@ -3,7 +3,7 @@
  * Plugin Name: Video Playlist for YouTube
  * Plugin URI: https://wordpress.org/plugins/video-playlist-for-youtube
  * Description: It is a very nifty responsive video playlist for youtube that helps you display youtube channels and videos on your website. By using this plugin you can create unlimited playlist while setting up many options and arrange them in any order using drag n drop features.
- * Version: 6.7
+ * Version: 6.7.1
  * Author: Galaxy Weblinks
  * Author URI: https://www.galaxyweblinks.com/
  * Text Domain: video-playlist-for-youtube
@@ -53,9 +53,11 @@ add_action('admin_notices', 'uvfy_vplay_admin_notice__success');
 add_action('admin_menu', 'vpfu_vplay_add_menu');
 function vpfu_vplay_add_menu()
 {
+	if ( ! defined( 'VPFY_VPLAYLIST_PRO_ACTIVE' ) ) {
 	add_menu_page('video playlist', __('Video Playlist', 'video-playlist-for-youtube'), 'manage_options', 'edit.php?post_type=vid_playlist_ytub', NULL);
 	add_submenu_page('edit.php?post_type=vid_playlist_ytub', 'settings', __('Settings', 'video-playlist-for-youtube'), 'manage_options', 'vpfy_settings_menu', 'vpfy_submenu_settings_page');
 	add_action('admin_init', 'vpfyt_settings_api_forytub');
+	}
 }
 /*Register setting api*/
 function vpfyt_settings_api_forytub()

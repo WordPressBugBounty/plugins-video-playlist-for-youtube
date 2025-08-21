@@ -31,10 +31,10 @@ function vpfy_submenu_settings_page() { ?>
         ?>
 
         <h2 class="nav-tab-wrapper">
-            <a href="<?php echo esc_attr($dashboard);  ?>" class="nav-tab <?php echo $_GET['tab'] == '' ? 'nav-tab-active' : ''; ?>"><?php esc_attr_e('Dashboard', 'video-playlist-for-youtube'); ?></a>
-            <a href="<?php echo esc_attr($settings); ?>" class="nav-tab <?php echo $_GET['tab'] == 'settings' ? 'nav-tab-active' : ''; ?>"><?php esc_attr_e('General Settings', 'video-playlist-for-youtube'); ?></a>
-            <a href="<?php echo esc_attr($api); ?>" class="nav-tab <?php echo $_GET['tab'] == 'api' ? 'nav-tab-active' : ''; ?>"><?php esc_attr_e('YouTube API', 'video-playlist-for-youtube'); ?></a>
-            <a href="<?php echo esc_attr($help); ?>" class="nav-tab <?php echo $_GET['tab'] == 'help' ? 'nav-tab-active' : ''; ?>"><?php esc_attr_e('Help/Usage', 'video-playlist-for-youtube'); ?></a>
+            <a href="<?php echo esc_attr($dashboard);  ?>" class="nav-tab <?php echo (!isset($_GET['tab']) || $_GET['tab'] == 'dashboard' ) ? 'nav-tab-active' : ''; ?>"><?php esc_attr_e('Dashboard', 'video-playlist-for-youtube'); ?></a>
+            <a href="<?php echo esc_attr($settings); ?>" class="nav-tab <?php echo (isset($_GET['tab']) && $_GET['tab'] == 'settings' ) ? 'nav-tab-active' : ''; ?>"><?php esc_attr_e('General Settings', 'video-playlist-for-youtube'); ?></a>
+            <a href="<?php echo esc_attr($api); ?>" class="nav-tab <?php echo (isset($_GET['tab']) && $_GET['tab'] == 'api' ) ? 'nav-tab-active' : ''; ?>"><?php esc_attr_e('YouTube API', 'video-playlist-for-youtube'); ?></a>
+            <a href="<?php echo esc_attr($help); ?>" class="nav-tab <?php echo (isset($_GET['tab']) && $_GET['tab'] == 'help' ) ? 'nav-tab-active' : ''; ?>"><?php esc_attr_e('Help/Usage', 'video-playlist-for-youtube'); ?></a>
         </h2>
 
         <?php if ( empty($_GET['tab']) || !isset($_GET['tab']) || $_GET['tab'] === 'dashboard') { ?>

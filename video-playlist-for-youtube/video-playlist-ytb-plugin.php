@@ -3,7 +3,7 @@
  * Plugin Name: Video Playlist for YouTube
  * Plugin URI: https://wordpress.org/plugins/video-playlist-for-youtube
  * Description: It is a very nifty responsive video playlist for youtube that helps you display youtube channels and videos on your website. By using this plugin you can create unlimited playlist while setting up many options and arrange them in any order using drag n drop features.
- * Version: 6.7.1
+ * Version: 6.8
  * Author: Galaxy Weblinks
  * Author URI: https://www.galaxyweblinks.com/
  * Text Domain: video-playlist-for-youtube
@@ -28,12 +28,12 @@ require_once(VID_PLYLST_PLUGINPATH . 'vpfy-vplaylist-functions.php');
 require_once(VID_PLYLST_PLUGINPATH . 'vpfy-settings-pg.php');
 require_once(VID_PLYLST_PLUGINPATH . 'vpfy-api-playlist-shortcode.php');
 //admin notice when activate plugin
-register_activation_hook(__FILE__, 'uvfy_vplay_adminnotice');
-function uvfy_vplay_adminnotice()
+register_activation_hook(__FILE__, 'vpfy_vplay_adminnotice');
+function vpfy_vplay_adminnotice()
 {
 	update_option('video_plylst_admin_notice', 'enabled');
 }
-function uvfy_vplay_admin_notice__success()
+function vpfy_vplay_admin_notice__success()
 {
 	if (get_option('video_plylst_admin_notice') == 'enabled') {
 ?>
@@ -47,11 +47,11 @@ function uvfy_vplay_admin_notice__success()
 		delete_option('video_plylst_admin_notice');
 	}
 }
-add_action('admin_notices', 'uvfy_vplay_admin_notice__success');
+add_action('admin_notices', 'vpfy_vplay_admin_notice__success');
 
 //Add Menu Page
-add_action('admin_menu', 'vpfu_vplay_add_menu');
-function vpfu_vplay_add_menu()
+add_action('admin_menu', 'vpfy_vplay_add_menu');
+function vpfy_vplay_add_menu()
 {
 	if ( ! defined( 'VPFY_VPLAYLIST_PRO_ACTIVE' ) ) {
 	add_menu_page('video playlist', __('Video Playlist', 'video-playlist-for-youtube'), 'manage_options', 'edit.php?post_type=vid_playlist_ytub', NULL);
@@ -62,7 +62,21 @@ function vpfu_vplay_add_menu()
 /*Register setting api*/
 function vpfyt_settings_api_forytub()
 {
-	register_setting('vpfy_reg_groupname', 'vpfy_reg_ytubapi_key');
+	register_setting('vpfy_reg_groupname', 'vpfy_reg_ytubapi_key', array('sanitize_callback' => 'vpfy_sanitize_ytubapi_key'));
+}
+
+function vpfy_sanitize_ytubapi_key($api_key)
+{
+	if (!is_array($api_key)) {
+		return array();
+	}
+
+	$sanitized = array();
+	foreach ($api_key as $key) {
+		$sanitized[] = sanitize_text_field(wp_unslash($key));
+	}
+
+	return $sanitized;
 }
 
 add_action('init', 'vpfy_vplaylist_custompt', 0);
@@ -237,15 +251,15 @@ function vpfy_vplaylist_repeatable_meta_box_display()
 	<p><a id="add-row" class="button" href="#">Add another</a></p>
 <?php
 }
-add_action('save_post', 'custom_repeatable_meta_box_save');
-function custom_repeatable_meta_box_save($post_id)
+add_action('save_post', 'vpfy_custom_repeatable_meta_box_save');
+function vpfy_custom_repeatable_meta_box_save($post_id)
 {
 
 	//check_admin_referer('gpm_repeatable_meta_box_nonce', 'gpm_repeatable_meta_box_nonce');
 
 	if (
 		! isset($_POST['gpm_repeatable_meta_box_nonce']) ||
-		! wp_verify_nonce($_POST['gpm_repeatable_meta_box_nonce'], 'gpm_repeatable_meta_box_nonce')
+		! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['gpm_repeatable_meta_box_nonce'])), 'gpm_repeatable_meta_box_nonce')
 	)
 		return;
 
@@ -255,30 +269,49 @@ function custom_repeatable_meta_box_save($post_id)
 	if (!current_user_can('edit_post', $post_id))
 		return;
 
+	$title_items_raw     = filter_input(INPUT_POST, 'TitleItem', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+	$title_desc_raw      = filter_input(INPUT_POST, 'TitleDescription', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+	$description_len_raw = filter_input(INPUT_POST, 'Descriptionlength', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+	$youtube_url_raw     = filter_input(INPUT_POST, 'YoutubeUr', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+
+	if (
+		! is_array($title_items_raw) ||
+		! is_array($title_desc_raw) ||
+		! is_array($description_len_raw) ||
+		! is_array($youtube_url_raw)
+	) {
+		return;
+	}
+
 	$old = get_post_meta($post_id, 'customdata_group', true);
 	$new = array();
 
 
+	$title_items_post       = wp_unslash($title_items_raw);
+	$title_desc_post        = wp_unslash($title_desc_raw);
+	$description_len_post   = wp_unslash($description_len_raw);
+	$youtube_url_post       = wp_unslash($youtube_url_raw);
+
 	/* Title */
 	$invoiceItems = array();
-	foreach ($_POST['TitleItem'] as $titlValue) {
+	foreach ($title_items_post as $titlValue) {
 		$invoiceItems[] = sanitize_text_field($titlValue);
 	}
 	/*Description*/
 	$prices = array();
-	foreach ($_POST['TitleDescription'] as $titlDesValue) {
+	foreach ($title_desc_post as $titlDesValue) {
 		$prices[] = sanitize_textarea_field($titlDesValue);
 	}
 
 	/*Description length*/
 	$deslength = array();
-	foreach ($_POST['Descriptionlength'] as $titlDesLength) {
-		$deslength[] = sanitize_textarea_field($titlDesLength);
+	foreach ($description_len_post as $titlDesLength) {
+		$deslength[] = sanitize_text_field($titlDesLength);
 	}
 
 	/*URL*/
 	$YoutubeUr = array();
-	foreach ($_POST['YoutubeUr'] as $youtubeUrlValue) {
+	foreach ($youtube_url_post as $youtubeUrlValue) {
 		$YoutubeUr[] = sanitize_text_field($youtubeUrlValue);
 	}
 
@@ -295,9 +328,11 @@ function custom_repeatable_meta_box_save($post_id)
 		update_post_meta($post_id, 'customdata_group', $new);
 	elseif (empty($new) && $old)
 		delete_post_meta($post_id, 'customdata_group', $old);
-	if (isset($_POST['utubeSliderRange'])) {
+	$slider_range_raw = filter_input(INPUT_POST, 'utubeSliderRange', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+	if (is_array($slider_range_raw)) {
+		$slider_range_post = wp_unslash($slider_range_raw);
 		$new_itm_range = array();
-		foreach ($_POST['utubeSliderRange'] as $rangevalue) {
+		foreach ($slider_range_post as $rangevalue) {
 			$new_itm_range[] = sanitize_text_field($rangevalue);
 		}
 		update_post_meta($post_id, '_utubeSliderRange', $new_itm_range);
@@ -313,9 +348,9 @@ function vpfy_vplaylist_display_gallery($atts)
 
     $output = '';
     ob_start(); ?>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
-    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
     <?php
+    wp_enqueue_script('jquery');
+    wp_enqueue_style('vpfy-google-fonts', 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light', array(), '1.0.0');
     wp_enqueue_script('vpfy-playlist-min');
     wp_enqueue_script('vpfy-playlist-video');
     wp_enqueue_script('vpfy-unitegallery-video');
@@ -330,7 +365,10 @@ function vpfy_vplaylist_display_gallery($atts)
 
         echo ('<div id="gallery' . esc_attr($arry_arg['id']) . '" style="margin:0px auto;display:none;">');
         foreach ($ytube_custmgrp as $ykey => $ytubvalue) {
-            $ytuburl = parse_url($ytubvalue['YoutubeUr']);
+            $ytuburl = wp_parse_url(isset($ytubvalue['YoutubeUr']) ? $ytubvalue['YoutubeUr'] : '');
+            if (! is_array($ytuburl)) {
+                $ytuburl = array();
+            }
 
             $existance = 0;
             foreach ($ytuburl as $utkey => $utvalue) {
@@ -341,17 +379,21 @@ function vpfy_vplaylist_display_gallery($atts)
                 }
             }
 
+            // Set default description length to 80 if not provided (used in both branches below).
+            $descriptionlength = ! empty($ytubvalue['Descriptionlength']) && is_numeric($ytubvalue['Descriptionlength']) ? (int) $ytubvalue['Descriptionlength'] : 80;
+
             if ($existance == 1) {
-                $ytubid = explode('v=', $ytuburl['query']);
-                $ytubid = explode('&', $ytubid[1]);
+				$ytubid_parts = explode('v=', $ytuburl['query']);
+                if (!isset($ytubid_parts[1])) {
+                    $ytubid = array('123');
+                } else {
+                    $ytubid = explode('&', $ytubid_parts[1]);
+                }
                 if (strlen($ytubvalue['TitleItem']) > 25) {
                     $ytvidTitle = substr($ytubvalue['TitleItem'], 0, 25) . "...";
                 } else {
                     $ytvidTitle = $ytubvalue['TitleItem'];
                 }
-
-                // Set default description length to 80 if not provided
-                $descriptionlength = !empty($ytubvalue['Descriptionlength']) && is_numeric($ytubvalue['Descriptionlength']) ? $ytubvalue['Descriptionlength'] : 80;
                 ?>
                 <div data-type="youtube"
                     data-title="<?php echo esc_attr($ytvidTitle); ?>"
@@ -400,8 +442,8 @@ return $output;
 }
 
 // Add the custom columns to the youtube playlist post type:
-add_filter('manage_vid_playlist_ytub_posts_columns', 'set_custom_vpfy_shortcode_columns');
-function set_custom_vpfy_shortcode_columns($columns)
+add_filter('manage_vid_playlist_ytub_posts_columns', 'vpfy_set_custom_vpfy_shortcode_columns');
+function vpfy_set_custom_vpfy_shortcode_columns($columns)
 {
 	$columns['vpfy_col_shortcode'] = __('Shortcode', 'video-playlist-for-youtube');
 	return $columns;
@@ -448,11 +490,15 @@ function vpfytGetYoutubeDuration()
 
 	if (
 		! isset($_POST['gpm_repeatable_meta_box_nonce']) ||
-		! wp_verify_nonce($_POST['gpm_repeatable_meta_box_nonce'], 'gpm_repeatable_meta_box_nonce')
+		! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['gpm_repeatable_meta_box_nonce'])), 'gpm_repeatable_meta_box_nonce')
 	)
 		return;
 
-	$vid = $_POST['ytvideo_id'];
+	if (! isset($_POST['ytvideo_id'])) {
+		return;
+	}
+
+	$vid = sanitize_text_field(wp_unslash($_POST['ytvideo_id']));
 	$get_Gapi_key = get_option('vpfy_reg_ytubapi_key');
 	$response = wp_remote_get("https://www.googleapis.com/youtube/v3/videos?id=" . $vid . "&part=contentDetails,statistics&key=" . $get_Gapi_key[0]);
 

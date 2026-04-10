@@ -46,13 +46,13 @@ function vpfy_submenu_settings_page() { ?>
                 //check_admin_referer('gpm_repeatable_meta_box_nonce', 'gpm_repeatable_meta_box_nonce');
 
                 if ( ! isset( $_POST['gpm_repeatable_meta_box_nonce'] ) ||
-                    ! wp_verify_nonce( $_POST['gpm_repeatable_meta_box_nonce'], 'gpm_repeatable_meta_box_nonce' ) )
+                    ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gpm_repeatable_meta_box_nonce'] ) ), 'gpm_repeatable_meta_box_nonce' ) )
                     return;
 
-                $vpfy_channelid = sanitize_text_field($_POST['vpfy_channelid']);
-                $vpfy_maxvideos = (int) sanitize_text_field($_POST['vpfy_maxvideos']);
-                $vpfysliderwid = (int) sanitize_text_field($_POST['vpfysliderwid']);
-                $vpfysliderhei = (int) sanitize_text_field($_POST['vpfysliderhei']);
+                $vpfy_channelid = isset($_POST['vpfy_channelid']) ? sanitize_text_field(wp_unslash($_POST['vpfy_channelid'])) : '';
+                $vpfy_maxvideos = isset($_POST['vpfy_maxvideos']) ? (int) sanitize_text_field(wp_unslash($_POST['vpfy_maxvideos'])) : 0;
+                $vpfysliderwid = isset($_POST['vpfysliderwid']) ? (int) sanitize_text_field(wp_unslash($_POST['vpfysliderwid'])) : 0;
+                $vpfysliderhei = isset($_POST['vpfysliderhei']) ? (int) sanitize_text_field(wp_unslash($_POST['vpfysliderhei'])) : 0;
                 ?>
 
                 <div class="genratshort updated notice is-dismissible">
@@ -106,22 +106,22 @@ function vpfy_submenu_settings_page() { ?>
                         //check_admin_referer('gpm_repeatable_meta_box_nonce', 'gpm_repeatable_meta_box_nonce');
 
                         if ( ! isset( $_POST['gpm_repeatable_meta_box_nonce'] ) ||
-                            ! wp_verify_nonce( $_POST['gpm_repeatable_meta_box_nonce'], 'gpm_repeatable_meta_box_nonce' ) )
+                            ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gpm_repeatable_meta_box_nonce'] ) ), 'gpm_repeatable_meta_box_nonce' ) )
                             return;
 
 
                         if (isset($_POST['vpfy_vid_autoply'])) {
-                            update_option('vpfy_vid_autoply', (int) sanitize_text_field($_POST['vpfy_vid_autoply']));
+                            update_option('vpfy_vid_autoply', (int) sanitize_text_field(wp_unslash($_POST['vpfy_vid_autoply'])));
                         } else {
                             update_option('vpfy_vid_autoply', 0);
                         }
                         if (isset($_POST['vpfy_vid_length'])) {
-                            update_option('vpfy_vid_length', (int) sanitize_text_field($_POST['vpfy_vid_length']));
+                            update_option('vpfy_vid_length', (int) sanitize_text_field(wp_unslash($_POST['vpfy_vid_length'])));
                         } else {
                             update_option('vpfy_vid_length', 0);
                         }
                         if (isset($_POST['ytpp_controls'])) {
-                            update_option('ytpp_controls', (int) sanitize_text_field($_POST['ytpp_controls']));
+                            update_option('ytpp_controls', (int) sanitize_text_field(wp_unslash($_POST['ytpp_controls'])));
                         } else {
                             update_option('ytpp_controls', 0);
                         }

@@ -1,12 +1,12 @@
-=== Video Playlist For YouTube ===
+=== Video Playlist for YouTube ===
 
 Contributors: galaxyweblinks
 Donate link: https://www.galaxyweblinks.com
 Tags: Videos, YouTube Video, Video gallery, YouTube gallery, YouTube slider
 Requires at least: WordPress 4.9 or higher
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 6.7.1
+Stable tag: 6.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,9 +36,9 @@ FEATURES OF VIDEO PLAYLIST FOR YOUTUBE:
 * Adjust the width and height features for each playlist.
 * Create unlimited Video playlists.
 
-= Video Playlist For YouTube Pro =
+= Video Playlist for YouTube Pro =
 
-[__Video Playlist For YouTube Pro__](https://wp-plugins.galaxyweblinks.com/product/video-playlist-for-youtube-pro) is the ultimate tool for content creators, marketers, educators, and anyone looking to present their video content professionally and effectively. Elevate your website with dynamic, engaging video experiences that captivate your audience and keep them coming back for more!
+[__Video Playlist for YouTube Pro__](https://wp-plugins.galaxyweblinks.com/product/video-playlist-for-youtube-pro) is the ultimate tool for content creators, marketers, educators, and anyone looking to present their video content professionally and effectively. Elevate your website with dynamic, engaging video experiences that captivate your audience and keep them coming back for more!
 
 Using this feature, the user can create unlimited video playlists using embedded custom YouTube/Wistia video URLs. Users can add the title and description for each video and arrange them in any order as per their requirements. They can also set playlist width and height, enable autoplay, and display video length.
 
@@ -115,6 +115,9 @@ Please check the below steps.
 
 == Changelog ==
 
+= 6.8 =
+- Stable Release
+
 = 6.7.1 =
 - Stable Release
 
@@ -165,6 +168,9 @@ Implemented Video length on the video thumbnail in the playlist
 First Stable Release
 
 == Upgrade Notice ==
+
+= 6.8 =
+- Stable Release
 
 = 6.7.1 =
 - Stable Release

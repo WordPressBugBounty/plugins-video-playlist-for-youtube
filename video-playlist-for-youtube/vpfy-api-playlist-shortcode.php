@@ -7,9 +7,9 @@ function vpfy_vplaylist_display_channel_playlist($atts){
   
   $output = '';
   ob_start(); ?>
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
-  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
-  <?php 
+  <?php
+    wp_enqueue_script('jquery');
+    wp_enqueue_style('vpfy-google-fonts', 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light', array(), '1.0.0');
     wp_enqueue_script('vpfy-playlist-min');
     wp_enqueue_script('vpfy-playlist-video');
     wp_enqueue_script('vpfy-unitegallery-video');

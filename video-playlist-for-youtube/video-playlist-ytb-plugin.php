@@ -3,7 +3,7 @@
  * Plugin Name: Video Playlist for YouTube
  * Plugin URI: https://wordpress.org/plugins/video-playlist-for-youtube
  * Description: It is a very nifty responsive video playlist for youtube that helps you display youtube channels and videos on your website. By using this plugin you can create unlimited playlist while setting up many options and arrange them in any order using drag n drop features.
- * Version: 6.8
+ * Version: 6.9
  * Author: Galaxy Weblinks
  * Author URI: https://www.galaxyweblinks.com/
  * Text Domain: video-playlist-for-youtube
@@ -379,9 +379,10 @@ function vpfy_vplaylist_display_gallery($atts)
                 }
             }
 
-            // Set default description length to 80 if not provided (used in both branches below).
+			// Set default description length to 80 if not provided (used in both branches below).
             $descriptionlength = ! empty($ytubvalue['Descriptionlength']) && is_numeric($ytubvalue['Descriptionlength']) ? (int) $ytubvalue['Descriptionlength'] : 80;
-
+			
+		
             if ($existance == 1) {
 				$ytubid_parts = explode('v=', $ytuburl['query']);
                 if (!isset($ytubid_parts[1])) {
@@ -394,6 +395,8 @@ function vpfy_vplaylist_display_gallery($atts)
                 } else {
                     $ytvidTitle = $ytubvalue['TitleItem'];
                 }
+
+				
                 ?>
                 <div data-type="youtube"
                     data-title="<?php echo esc_attr($ytvidTitle); ?>"
@@ -555,7 +558,7 @@ function vpfy_add_custom_plugin_links($links, $file) {
 	// Replace 'your-plugin-folder/your-plugin-file.php' with your actual plugin file path
 	if ($file === 'video-playlist-for-youtube/video-playlist-ytb-plugin.php') {
 		$links[] = '<a href="https://wp-plugins.galaxyweblinks.com/wp-plugins/video-playlist-for-youtube/demo/" target="_blank">Demo</a>';
-		$links[] = '<a href="https://wp-plugins.galaxyweblinks.com/wp-plugins/disable-feeds-wp/doc/" target="_blank">Documentation</a>';
+		$links[] = '<a href="https://wp-plugins.galaxyweblinks.com/wp-plugins/video-playlist-for-youtube/doc/" target="_blank">Documentation</a>';
 		$links[] = '<a href="https://wp-plugins.galaxyweblinks.com/contact/" target="_blank">Contact Support</a>';
 	}
 	return $links;

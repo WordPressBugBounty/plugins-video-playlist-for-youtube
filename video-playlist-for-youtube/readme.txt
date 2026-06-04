@@ -3,10 +3,10 @@
 Contributors: galaxyweblinks
 Donate link: https://www.galaxyweblinks.com
 Tags: Videos, YouTube Video, Video gallery, YouTube gallery, YouTube slider
-Requires at least: WordPress 4.9 or higher
-Tested up to: 6.9
+Requires at least: WordPress 6.8 or higher
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 6.8
+Stable tag: 6.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -115,6 +115,9 @@ Please check the below steps.
 
 == Changelog ==
 
+= 6.9 =
+- Tested with WordPress 7.0.
+
 = 6.8 =
 - Stable Release
 
@@ -168,6 +171,9 @@ Implemented Video length on the video thumbnail in the playlist
 First Stable Release
 
 == Upgrade Notice ==
+
+= 6.9 =
+- Tested with WordPress 7.0.
 
 = 6.8 =
 - Stable Release

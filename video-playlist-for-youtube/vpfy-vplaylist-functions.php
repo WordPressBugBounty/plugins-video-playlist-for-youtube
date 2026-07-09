@@ -36,5 +36,66 @@ function vpfy_vplaylist_frontend_display_gallery(){
 
 }
 
+/**
+ * Extract a YouTube video ID from common URL formats.
+ *
+ * Supports watch, Shorts, youtu.be, embed, and /v/ URLs.
+ *
+ * @param string $url YouTube video URL.
+ * @return string Video ID or empty string when not found.
+ */
+function vpfy_extract_youtube_video_id( $url ) {
+	if ( empty( $url ) || ! is_string( $url ) ) {
+		return '';
+	}
+
+	$url = trim( $url );
+	$parsed = wp_parse_url( $url );
+
+	if ( ! is_array( $parsed ) ) {
+		return '';
+	}
+
+	$host = isset( $parsed['host'] ) ? strtolower( $parsed['host'] ) : '';
+
+	// youtu.be/VIDEO_ID
+	if ( 'youtu.be' === $host && ! empty( $parsed['path'] ) ) {
+		$video_id = strtok( trim( $parsed['path'], '/' ), '?#' );
+		if ( vpfy_is_valid_youtube_video_id( $video_id ) ) {
+			return $video_id;
+		}
+	}
+
+	// ?v=VIDEO_ID (standard watch URLs and legacy parsing behaviour).
+	if ( ! empty( $parsed['query'] ) ) {
+		parse_str( $parsed['query'], $query_args );
+		if ( ! empty( $query_args['v'] ) ) {
+			$video_id = strtok( $query_args['v'], '&#' );
+			if ( vpfy_is_valid_youtube_video_id( $video_id ) ) {
+				return $video_id;
+			}
+		}
+	}
+
+	// Path-based formats: /shorts/ID, /embed/ID, /v/ID, /live/ID.
+	if ( ! empty( $parsed['path'] ) ) {
+		$path = trim( $parsed['path'], '/' );
+		if ( preg_match( '#^(?:shorts|embed|v|live)/([\w-]{11})#i', $path, $matches ) ) {
+			return $matches[1];
+		}
+	}
+
+	return '';
+}
+
+/**
+ * Validate a YouTube video ID.
+ *
+ * @param string $video_id Candidate video ID.
+ * @return bool
+ */
+function vpfy_is_valid_youtube_video_id( $video_id ) {
+	return is_string( $video_id ) && (bool) preg_match( '/^[\w-]{11}$/', $video_id );
+}
 
 

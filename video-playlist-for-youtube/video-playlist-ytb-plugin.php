@@ -3,7 +3,7 @@
  * Plugin Name: Video Playlist for YouTube
  * Plugin URI: https://wordpress.org/plugins/video-playlist-for-youtube
  * Description: It is a very nifty responsive video playlist for youtube that helps you display youtube channels and videos on your website. By using this plugin you can create unlimited playlist while setting up many options and arrange them in any order using drag n drop features.
- * Version: 6.9
+ * Version: 6.10
  * Author: Galaxy Weblinks
  * Author URI: https://www.galaxyweblinks.com/
  * Text Domain: video-playlist-for-youtube
@@ -365,53 +365,32 @@ function vpfy_vplaylist_display_gallery($atts)
 
         echo ('<div id="gallery' . esc_attr($arry_arg['id']) . '" style="margin:0px auto;display:none;">');
         foreach ($ytube_custmgrp as $ykey => $ytubvalue) {
-            $ytuburl = wp_parse_url(isset($ytubvalue['YoutubeUr']) ? $ytubvalue['YoutubeUr'] : '');
-            if (! is_array($ytuburl)) {
-                $ytuburl = array();
+            $youtube_url = isset( $ytubvalue['YoutubeUr'] ) ? $ytubvalue['YoutubeUr'] : '';
+            $video_id    = vpfy_extract_youtube_video_id( $youtube_url );
+            $has_video_id = ! empty( $video_id );
+
+            // Preserve legacy fallback for unrecognised URLs.
+            if ( ! $has_video_id ) {
+                $video_id = '123';
             }
 
-            $existance = 0;
-            foreach ($ytuburl as $utkey => $utvalue) {
-                if ('query' == $utkey) {
-                    $existance = 1;
-                } else {
-                    $existance = 0;
-                }
+            // Set default description length to 80 if not provided.
+            $descriptionlength = ! empty( $ytubvalue['Descriptionlength'] ) && is_numeric( $ytubvalue['Descriptionlength'] ) ? (int) $ytubvalue['Descriptionlength'] : 80;
+
+            // Preserve existing title truncation only when a valid video ID is found.
+            if ( $has_video_id && strlen( $ytubvalue['TitleItem'] ) > 25 ) {
+                $ytvidTitle = substr( $ytubvalue['TitleItem'], 0, 25 ) . '...';
+            } else {
+                $ytvidTitle = $ytubvalue['TitleItem'];
             }
-
-			// Set default description length to 80 if not provided (used in both branches below).
-            $descriptionlength = ! empty($ytubvalue['Descriptionlength']) && is_numeric($ytubvalue['Descriptionlength']) ? (int) $ytubvalue['Descriptionlength'] : 80;
-			
-		
-            if ($existance == 1) {
-				$ytubid_parts = explode('v=', $ytuburl['query']);
-                if (!isset($ytubid_parts[1])) {
-                    $ytubid = array('123');
-                } else {
-                    $ytubid = explode('&', $ytubid_parts[1]);
-                }
-                if (strlen($ytubvalue['TitleItem']) > 25) {
-                    $ytvidTitle = substr($ytubvalue['TitleItem'], 0, 25) . "...";
-                } else {
-                    $ytvidTitle = $ytubvalue['TitleItem'];
-                }
-
-				
-                ?>
+            ?>
                 <div data-type="youtube"
-                    data-title="<?php echo esc_attr($ytvidTitle); ?>"
-                    data-description="<?php echo esc_attr(substr($ytubvalue['TitleDescription'], 0, $descriptionlength)); ?>"
-                    data-thumb="https://i.ytimg.com/vi/<?php echo esc_attr($ytubid[0]); ?>/mqdefault.jpg"
-                    data-image="https://i.ytimg.com/vi/<?php echo esc_attr($ytubid[0]); ?>/sddefault.jpg"
-                    data-videoid="<?php echo esc_attr($ytubid[0]); ?>"></div>
-            <?php } elseif ($existance == 0) { ?>
-                <div data-type="youtube"
-                    data-title="<?php echo esc_attr($ytubvalue['TitleItem']); ?>"
-                    data-description="<?php echo esc_attr(substr($ytubvalue['TitleDescription'], 0, $descriptionlength)); ?>"
-                    data-thumb="https://i.ytimg.com/vi/123/mqdefault.jpg"
-                    data-image="https://i.ytimg.com/vi/123/sddefault.jpg"
-                    data-videoid="123"></div>
-        <?php }
+                    data-title="<?php echo esc_attr( $ytvidTitle ); ?>"
+                    data-description="<?php echo esc_attr( substr( $ytubvalue['TitleDescription'], 0, $descriptionlength ) ); ?>"
+                    data-thumb="https://i.ytimg.com/vi/<?php echo esc_attr( $video_id ); ?>/mqdefault.jpg"
+                    data-image="https://i.ytimg.com/vi/<?php echo esc_attr( $video_id ); ?>/sddefault.jpg"
+                    data-videoid="<?php echo esc_attr( $video_id ); ?>"></div>
+        <?php
         }
         echo ('</div>');
 
